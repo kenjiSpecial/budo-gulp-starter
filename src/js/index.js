@@ -1,41 +1,35 @@
-const glslify = require('glslify');
+require('pixi.js')
 
-const THREE = require('three');
+var renderer = new PIXI.WebGLRenderer(800, 600);
 
-var camera, scene, renderer;
-var geometry, shaderMaterial, mesh;
+// The renderer will create a canvas element for you that you can then insert into the DOM.
+document.body.appendChild(renderer.view);
 
-function init() {
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
-    camera.position.z = 1000;
+// You need to create a root container that will hold the scene you want to draw.
+var stage = new PIXI.Container();
 
-    scene = new THREE.Scene();
-    geometry = new THREE.BoxGeometry(200, 200, 200);
-    shaderMaterial = new THREE.ShaderMaterial({
-        vertexShader: glslify('./shaders/shader.vert'),
-        fragmentShader: glslify('./shaders/shader.frag')
-    });
 
-    mesh = new THREE.Mesh(geometry, shaderMaterial);
-    scene.add(mesh);
+var graphics = new PIXI.Graphics();
 
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000);
+// set a fill and line style
+// graphics.beginFill(0xFFffff);
+graphics.lineStyle(10, 0xffff00, 2);
 
-    document.body.appendChild(renderer.domElement);
+// draw a shape
+graphics.moveTo(50,50);
+graphics.lineTo(250, 50);
+graphics.lineTo(100, 100);
+graphics.lineTo(50, 50);
+graphics.endFill();
+
+
+stage.addChild(graphics);
+
+// run the render loop
+animate();
+
+function animate() {
+
+    renderer.render(stage);
+    requestAnimationFrame( animate );
 }
-
-function loop() {
-    requestAnimationFrame(loop);
-
-    mesh.rotation.x += 0.01;
-    mesh.rotation.y += 0.02;
-
-    renderer.render(scene, camera);
-}
-
-require('domready')(() => {
-    init();
-    loop();
-});
