@@ -50,8 +50,7 @@ body {
   font-family: 'Helvetica', sans-serif; }
 
 canvas {
-  display: block;
-  pointer-events: none; }
+  display: block; }
 
 a {
   color: #af2626;

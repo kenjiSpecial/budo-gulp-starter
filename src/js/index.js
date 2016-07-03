@@ -1,34 +1,89 @@
-require('pixi.js');
+/* the window.onload is ABSOLUTELY essential, otherwise opening and closing Iframes does not work;*/
+var PIXI = require('pixi.js');
 
-var renderer = new PIXI.WebGLRenderer( window.innerWidth, window.innerHeight, {antialias : true});
-
-// The renderer will create a canvas element for you that you can then insert into the DOM.
+var renderer = PIXI.autoDetectRenderer(800, 600);
 document.body.appendChild(renderer.view);
 
-// You need to create a root container that will hold the scene you want to draw.
+// create the root of the scene graph
 var stage = new PIXI.Container();
 
+// create a texture from an image path
+var texture = PIXI.Texture.fromImage('./bunny.png');
 
-var graphics = new PIXI.Graphics();
+for (var i = 0; i < 10; i++) {
+    createBunny(Math.floor(Math.random() * 800), Math.floor(Math.random() * 600));
+}
 
-// set a fill and line style
-// graphics.beginFill(0xFFffff);
-graphics.lineStyle(10, 0xffff00, 2);
+function createBunny(x, y) {
+    // create our little bunny friend..
+    var bunny = new PIXI.Sprite(texture);
 
-// draw a shape
-graphics.moveTo(50,50);
-graphics.lineTo(250, 50);
-graphics.lineTo(100, 100);
-graphics.lineTo(50, 50);
-graphics.endFill();
+    // enable the bunny to be interactive... this will allow it to respond to mouse and touch events
+    bunny.interactive = true;
 
-stage.addChild(graphics);
+    // this button mode will mean the hand cursor appears when you roll over the bunny with your mouse
+    bunny.buttonMode = true;
 
-// run the render loop
-animate();
+    // center the bunny's anchor point
+    bunny.anchor.set(0.5);
+
+    // make it a bit bigger, so it's easier to grab
+    bunny.scale.set(3);
+
+    // setup events
+    bunny
+    // events for drag start
+        .on('mousedown', onDragStart)
+        .on('touchstart', onDragStart)
+        // events for drag end
+        .on('mouseup', onDragEnd)
+        .on('mouseupoutside', onDragEnd)
+        .on('touchend', onDragEnd)
+        .on('touchendoutside', onDragEnd)
+        // events for drag move
+        .on('mousemove', onDragMove)
+        .on('touchmove', onDragMove);
+
+    // move the sprite to its designated position
+    bunny.position.x = x;
+    bunny.position.y = y;
+
+    // add it to the stage
+    stage.addChild(bunny);
+}
+
+requestAnimationFrame(animate);
 
 function animate() {
 
+    requestAnimationFrame(animate);
+
+    // render the stage
     renderer.render(stage);
-    requestAnimationFrame( animate );
+}
+
+function onDragStart(event) {
+    // store a reference to the data
+    // the reason for this is because of multitouch
+    // we want to track the movement of this particular touch
+    this.data = event.data;
+    this.alpha = 0.5;
+    this.dragging = true;
+}
+
+function onDragEnd() {
+    this.alpha = 1;
+
+    this.dragging = false;
+
+    // set the interaction data to null
+    this.data = null;
+}
+
+function onDragMove() {
+    if (this.dragging) {
+        var newPosition = this.data.getLocalPosition(this.parent);
+        this.position.x = newPosition.x;
+        this.position.y = newPosition.y;
+    }
 }
