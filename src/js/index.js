@@ -1,6 +1,6 @@
-require('pixi.js')
+require('pixi.js');
 
-var renderer = new PIXI.WebGLRenderer(800, 600);
+var renderer = new PIXI.WebGLRenderer( window.innerWidth, window.innerHeight, {antialias : true});
 
 // The renderer will create a canvas element for you that you can then insert into the DOM.
 document.body.appendChild(renderer.view);
@@ -21,7 +21,6 @@ graphics.lineTo(250, 50);
 graphics.lineTo(100, 100);
 graphics.lineTo(50, 50);
 graphics.endFill();
-
 
 stage.addChild(graphics);
 
