@@ -1,5 +1,9 @@
 #three-js-startker-kit
 
+install npm modules.
+
+npm update --save
+
 It is based on ("budo-gulp-starter")[https://github.com/mattdesl/budo-gulp-starter] by (Matt)[https://github.com/mattdesl]
 
 the below is the README.md of ("budo-gulp-starter")[https://github.com/mattdesl/budo-gulp-starter].
@@ -26,7 +30,7 @@ Some highlights:
   - Babel for ES6 transpiling
   - Syntax errors shown in the browser during development
 
-Note that budō is not tied to Gulp, and in some cases it may be easier to use it's command-line version. 
+Note that budō is not tied to Gulp, and in some cases it may be easier to use it's command-line version.
 
 ## Usage
 
@@ -41,11 +45,11 @@ npm install
 npm run open
 ```
 
-This should run the watch server and open `localhost:9966` in your default browser. Changes to `src/index.js` will trigger a incremental bundle and page reload. Changes to `src/sass/main.scss` will cause CSS injection without losing application state. 
+This should run the watch server and open `localhost:9966` in your default browser. Changes to `src/index.js` will trigger a incremental bundle and page reload. Changes to `src/sass/main.scss` will cause CSS injection without losing application state.
 
 Syntax errors are overlayed in the browser with a custom style:
 
-![img](http://i.imgur.com/dP7lH7N.png) 
+![img](http://i.imgur.com/dP7lH7N.png)
 
 ## tasks
 
