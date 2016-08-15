@@ -1,12 +1,12 @@
-#three-js-startker-kit
+#pixi-js-startker-kit
 
 install npm modules.
 
 npm update --save
 
-It is based on ("budo-gulp-starter")[https://github.com/mattdesl/budo-gulp-starter] by (Matt)[https://github.com/mattdesl]
+It is based on ["budo-gulp-starter"](https://github.com/mattdesl/budo-gulp-starter) by [Matt](https://github.com/mattdesl)
 
-the below is the README.md of ("budo-gulp-starter")[https://github.com/mattdesl/budo-gulp-starter].
+the below is the README.md of ["budo-gulp-starter"](https://github.com/mattdesl/budo-gulp-starter).
 
 ## In Development :construction:
 
