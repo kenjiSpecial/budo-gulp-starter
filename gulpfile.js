@@ -41,7 +41,7 @@ gulp.task('watch', ['sass'], function(cb) {
     dir: 'app',             // directory to serve
     open: argv.open,        // whether to open the browser
     browserify: {
-
+      transform : [babelify]
     }
   }).on('exit', cb)
 })
