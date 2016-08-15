@@ -10,9 +10,8 @@ const source = require('vinyl-source-stream')
 const budo = require('budo')
 const browserify = require('browserify')
 const resetCSS = require('node-reset-scss').includePath
-const glslify = require('glslify')
 const babelify = require('babelify').configure({
-  presets: ['es2015'] 
+  presets: ['es2015']
 })
 
 const entry = './src/js/index.js'
@@ -22,9 +21,9 @@ const outfile = 'bundle.js'
 //our CSS pre-processor
 gulp.task('sass', function() {
   gulp.src('./src/sass/main.scss')
-    .pipe(sass({ 
+    .pipe(sass({
       outputStyle: argv.production ? 'compressed' : undefined,
-      includePaths: [ resetCSS ] 
+      includePaths: [ resetCSS ]
     }).on('error', sass.logError))
     .pipe(gulp.dest('./app'))
 })
@@ -42,17 +41,14 @@ gulp.task('watch', ['sass'], function(cb) {
     dir: 'app',             // directory to serve
     open: argv.open,        // whether to open the browser
     browserify: {
-      transform:[
-        babelify,   //browserify transforms
-        glslify
-      ]
+
     }
   }).on('exit', cb)
 })
 
 //the distribution bundle task
 gulp.task('bundle', ['sass'], function() {
-  var bundler = browserify(entry, { transform: [babelify, glslify] })
+  var bundler = browserify(entry, { transform: [babelify] })
         .bundle()
   return bundler
     .pipe(source('index.js'))
