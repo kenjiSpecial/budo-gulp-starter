@@ -49,9 +49,12 @@ body {
   color: #1d1d1d;
   font-family: 'Helvetica', sans-serif; }
 
+html, body {
+  width: 100%;
+  height: 100%; }
+
 canvas {
-  display: block;
-  pointer-events: none; }
+  display: block; }
 
 a {
   color: #af2626;

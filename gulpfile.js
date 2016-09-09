@@ -12,21 +12,25 @@ const browserify = require('browserify')
 const resetCSS = require('node-reset-scss').includePath
 const glslify = require('glslify')
 const babelify = require('babelify').configure({
-  presets: ['es2015'] 
+  presets: ['es2015']
 })
 
 const entry = './src/js/index.js'
 const outfile = 'bundle.js'
+const opts = require('./gulp/options');
+const project = require('./project.json');
+const paths = project.env[opts.env];
+var envify = require('envify/custom');
 
 
 //our CSS pre-processor
 gulp.task('sass', function() {
   gulp.src('./src/sass/main.scss')
-    .pipe(sass({ 
-      outputStyle: argv.production ? 'compressed' : undefined,
-      includePaths: [ resetCSS ] 
-    }).on('error', sass.logError))
-    .pipe(gulp.dest('./app'))
+      .pipe(sass({
+        outputStyle: argv.production ? 'compressed' : undefined,
+        includePaths: [ resetCSS ]
+      }).on('error', sass.logError))
+      .pipe(gulp.dest('./app'))
 })
 
 //the development task
@@ -38,13 +42,18 @@ gulp.task('watch', ['sass'], function(cb) {
   budo(entry, {
     serve: 'bundle.js',     // end point for our <script> tag
     stream: process.stdout, // pretty-print requests
-    live: true,             // live reload & CSS injection
+    live: false,             // live reload & CSS injection
     dir: 'app',             // directory to serve
     open: argv.open,        // whether to open the browser
     browserify: {
       transform:[
         babelify,   //browserify transforms
-        glslify
+        glslify,
+        envify({
+          "ENV" : opts.env,
+          "BASE_URL" : paths.baseUrl,
+          "ASSETS_URL" : paths.assetsUrl
+        })
       ]
     }
   }).on('exit', cb)
@@ -52,11 +61,11 @@ gulp.task('watch', ['sass'], function(cb) {
 
 //the distribution bundle task
 gulp.task('bundle', ['sass'], function() {
-  var bundler = browserify(entry, { transform: [babelify, glslify] })
-        .bundle()
+  var bundler = browserify(entry, { transform: [babelify, glslify, envify({"ENV" : opts.env, "BASE_URL" : paths.baseUrl, "ASSETS_URL" : paths.assetsUrl})] })
+      .bundle()
   return bundler
-    .pipe(source('index.js'))
-    .pipe(streamify(uglify()))
-    .pipe(rename(outfile))
-    .pipe(gulp.dest('./app'))
+      .pipe(source('index.js'))
+      .pipe(streamify(uglify()))
+      .pipe(rename(outfile))
+      .pipe(gulp.dest('./app'))
 })
